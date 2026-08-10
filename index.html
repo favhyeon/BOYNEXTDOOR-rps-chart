@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>BOYNEXTDOOR 취향표</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="BOYNEXTDOOR 취향표">
+    <meta property="og:description" content="나만의 BOYNEXTDOOR 취향표를 만들어 보세요!">
+    <meta property="og:image" content="https://favhyeon.github.io/BOYNEXTDOOR-rps-chart/assets/og.png">
+    <meta property="og:image:width" content="1280">
+    <meta property="og:image:height" content="720">
+    <meta property="og:url" content="https://favhyeon.github.io/BOYNEXTDOOR-rps-chart/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="BOYNEXTDOOR 취향표">
+    <meta name="twitter:description" content="나만의 BOYNEXTDOOR 취향표를 만들어 보세요!">
+    <meta name="twitter:image" content="https://favhyeon.github.io/BOYNEXTDOOR-rps-chart/assets/og.png">
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+
+<body>
+<div class="wrapper">
+
+    <!-- 탭 전환 -->
+    <div class="tab-wrap">
+        <button id="tabRps" class="tab-btn active">옆페스 취향표</button>
+        <button id="tabLr" class="tab-btn">왼른 취향표</button>
+    </div>
+
+    <div id="scaleWrap" class="scale-wrap">
+
+        <!-- ===== 옆페스 취향표 ===== -->
+        <div id="captureArea" class="capture-area">
+
+            <img src="assets/logo.png" class="logo" alt="BOYNEXTDOOR">
+
+            <h1>옆페스 취향표<span id="dateTextRps" class="chart-date"></span></h1>
+
+            <div class="guide-list" id="guideListRps"></div>
+
+            <div class="table-wrap">
+                <div class="table-nav">
+                    <button id="undoBtn" class="nav-btn" title="이전" disabled>&#10094;</button>
+                    <button id="redoBtn" class="nav-btn" title="이후" disabled>&#10095;</button>
+                </div>
+                <table id="chartTable"></table>
+            </div>
+
+            <div class="legend">
+                <div class="legend-item"><span class="color otp"></span>OTP</div>
+                <div class="legend-item"><span class="color love"></span>좋아함</div>
+                <div class="legend-item"><span class="color like"></span>호감</div>
+                <div class="legend-item"><span class="color okay"></span>관심있음</div>
+                <div class="legend-item"><span class="color none"></span>관심없음</div>
+                <div class="legend-item"><span class="color bad"></span>별로</div>
+                <div class="legend-item"><span class="color hate"></span>지뢰</div>
+            </div>
+
+            <div class="capture-id-bottom">@0f3a1f</div>
+        </div>
+
+        <!-- ===== 왼른 취향표 ===== -->
+        <div id="captureAreaLr" class="capture-area hidden">
+
+            <img src="assets/logo.png" class="logo" alt="BOYNEXTDOOR">
+
+            <h1>왼른 취향표<span id="dateTextLr" class="chart-date"></span></h1>
+
+            <div class="guide-list" id="guideListLr"></div>
+
+            <div id="lrGrid" class="lr-grid"></div>
+
+            <div class="capture-id-bottom">@0f3a1f</div>
+        </div>
+
+    </div>
+
+    <div class="date-toggle-wrap" id="dateToggleWrap">
+        <label class="date-toggle">
+            <input type="checkbox" id="dateToggle">
+            이미지에 날짜 표시
+        </label>
+    </div>
+
+    <div class="button-wrap">
+        <button id="saveBtn"><span class="btn-icon">&#8681;</span>이미지 저장</button>
+        <button id="resetBtn"><span class="btn-icon">&#8635;</span>초기화</button>
+    </div>
+
+    <!-- 사진 업로드용 숨김 input -->
+    <input type="file" id="photoInput" accept="image/*" class="hidden">
+
+    <!-- 색상 선택 모달 -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-box">
+            <button id="closeModal" class="close-btn" aria-label="닫기">×</button>
+
+            <div id="modalTitle" class="modal-title"></div>
+
+            <div id="optionGrid" class="option-grid"></div>
+        </div>
+    </div>
+
+    <!-- 저장 완료 모달 -->
+    <div id="saveModal" class="modal hidden">
+        <div class="save-box">
+            <h2>이미지가 저장되었습니다!</h2>
+            <p>아래는 저장된 이미지 미리보기입니다.</p>
+            <img id="previewImage" alt="저장된 취향표 미리보기">
+            <button id="closeSaveModal">확인</button>
+        </div>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
