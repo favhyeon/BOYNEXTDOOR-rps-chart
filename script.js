@@ -98,6 +98,7 @@ const DESKTOP_CAPTURE_WIDTH = 1400;
 let currentTarget = null; // { type: "cell", td } | { type: "row", index } | { type: "col", index }
 let currentTab = "rps";
 let currentPhotoIndex = null;
+let currentBlobUrl = null; // 저장 미리보기/다운로드에 쓰이는 Blob URL (재사용 전 해제)
 
 const HISTORY_LIMIT = 50;
 let historyStack = [];
@@ -117,8 +118,8 @@ const GUIDE_TEXT = {
         "멤버 이름을 누르면 줄 전체선택이 가능해요."
     ],
     lr: [
-        "L-R 사이에서 원하는 부분을 선택하고, 아래 칸에 자유롭게 적어보세요.",
-        "각 멤버의 프로필을 선택하면 사진 변경이 가능해요."
+        "L-R 사이에서 원하는 칸을 여러 개 선택하고, 아래 칸에 취향을 적어보세요.",
+        "프로필을 선택하면 사진 변경이 가능해요."
     ]
 };
 
@@ -597,17 +598,36 @@ saveBtn.addEventListener("click", async () => {
             windowHeight: Math.max(area.scrollHeight, 1600)
         });
 
-        const image = canvas.toDataURL("image/png");
+        /*
+         * data: URL 대신 Blob URL을 사용한다.
+         * 표가 커지고 고화질(scale 4)로 캡처하면서 이미지 용량이 커졌는데,
+         * 아이폰 사파리는 큰 data: URL을 <a download>로 다운로드할 때
+         * "다운로드하시겠습니까?" 확인창까지만 뜨고 실제 저장은 안 되는
+         * 경우가 있다. Blob URL은 이런 용량 제한 없이 정상적인
+         * 다운로드(하단 진행 표시 → 다운로드 항목 저장)로 이어진다.
+         */
+        const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
 
-        previewImage.src = image;
+        if (!blob) {
+            throw new Error("이미지 변환에 실패했습니다.");
+        }
+
+        if (currentBlobUrl) {
+            URL.revokeObjectURL(currentBlobUrl);
+        }
+        currentBlobUrl = URL.createObjectURL(blob);
+
+        previewImage.src = currentBlobUrl;
         saveModal.classList.remove("hidden");
 
         const fileLabel = currentTab === "rps" ? "옆페스_취향표" : "공수_취향표";
 
         const link = document.createElement("a");
-        link.href = image;
+        link.href = currentBlobUrl;
         link.download = `BOYNEXTDOOR_${fileLabel}.png`;
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
     } catch (error) {
         console.error(error);
         alert("이미지 저장 중 문제가 발생했습니다.");
