@@ -32,14 +32,6 @@ const defaultPhotos = [
 ];
 
 /*
- * 왼른 취향표에 표시할 순서 (members 배열의 인덱스 기준).
- * 2열 grid가 좌→우, 위→아래 순으로 채워지기 때문에
- * 왼쪽 열: 성호, 리우, 재현 / 오른쪽 열: 태산, 이한, 운학 이 되도록
- * 성호(0), 태산(3), 리우(1), 이한(4), 재현(2), 운학(5) 순으로 나열.
- */
-const lrOrder = [0, 3, 1, 4, 2, 5];
-
-/*
  * 표에 표시할 커플명.
  * [행 멤버][열 멤버] 순서.
  * - 한탯 → 잏탯
@@ -390,7 +382,7 @@ window.addEventListener("click", (e) => {
 });
 
 /* ==========================================
-   왼른 취향표 - 기본 아바타 생성 (SVG)
+   공수 취향표 - 기본 아바타 생성 (SVG)
 ========================================== */
 
 function defaultAvatar(name, color) {
@@ -407,14 +399,13 @@ function defaultAvatar(name, color) {
 }
 
 /* ==========================================
-   왼른 취향표 - 그리드 생성
+   공수 취향표 - 그리드 생성
 ========================================== */
 
 function createLrGrid() {
     lrGrid.innerHTML = "";
 
-    lrOrder.forEach((index) => {
-        const member = members[index];
+    members.forEach((member, index) => {
         const row = document.createElement("div");
         row.className = "lr-row";
 
@@ -611,7 +602,7 @@ saveBtn.addEventListener("click", async () => {
         previewImage.src = image;
         saveModal.classList.remove("hidden");
 
-        const fileLabel = currentTab === "rps" ? "옆페스_취향표" : "왼른_취향표";
+        const fileLabel = currentTab === "rps" ? "옆페스_취향표" : "공수_취향표";
 
         const link = document.createElement("a");
         link.href = image;

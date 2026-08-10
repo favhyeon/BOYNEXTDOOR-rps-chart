@@ -250,6 +250,8 @@ td.diagonal {
 .lr-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(3, auto);
+    grid-auto-flow: column;
     gap: 30px 50px;
 }
 
@@ -677,28 +679,33 @@ button:hover {
         line-height: 1.5;
     }
 
-    /* 옆페스 취향표 - 6x6 표는 폭이 넓어 가로 스크롤로 확인 */
+    /* 옆페스 취향표 - 화면 폭에 맞춰 표 전체가 줄어들어
+       드래그 없이 한 화면에 다 보이도록 한다. */
     .table-wrap {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        overflow-x: visible;
     }
 
     table {
-        min-width: 620px;
+        width: 100%;
+        min-width: 0;
+        table-layout: fixed;
     }
 
     th {
-        height: 46px;
-        font-size: 14px;
+        height: 38px;
+        font-size: 11px;
+        padding: 0 1px;
+        word-break: keep-all;
     }
 
     th:first-child {
-        width: 64px;
+        width: 15%;
     }
 
     td {
-        height: 46px;
-        font-size: 14px;
+        height: 38px;
+        font-size: 11px;
+        padding: 0 1px;
     }
 
     .table-nav {
@@ -800,6 +807,8 @@ button:hover {
 
     .lr-grid {
         grid-template-columns: 1fr;
+        grid-template-rows: none;
+        grid-auto-flow: row;
         gap: 26px;
     }
 
