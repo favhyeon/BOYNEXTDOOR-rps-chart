@@ -96,6 +96,12 @@ const captureAreaRps = document.getElementById("captureArea");
 const captureAreaLr = document.getElementById("captureAreaLr");
 const lrGrid = document.getElementById("lrGrid");
 const photoInput = document.getElementById("photoInput");
+const scaleWrap = document.getElementById("scaleWrap");
+
+/* CSS의 @media (max-width: 768px)과 동일한 기준.
+   이 폭 이하에서는 JS로 축소하지 않고, 반응형 레이아웃을 그대로 사용한다. */
+const MOBILE_BREAKPOINT = 768;
+const DESKTOP_CAPTURE_WIDTH = 1400;
 
 let currentTarget = null; // { type: "cell", td } | { type: "row", index } | { type: "col", index }
 let currentTab = "rps";
@@ -585,12 +591,19 @@ saveBtn.addEventListener("click", async () => {
     /* 안내 문구, 이전/이후 버튼은 이미지에는 나오지 않도록 캡처 중에만 숨김 */
     area.classList.add("capturing");
 
+    /* 화면(특히 모바일)에 적용돼 있던 축소/반응형 스타일을 잠시 걷어내고,
+       항상 PC 버전과 동일한 1400px 레이아웃으로 저장되도록 한다. */
+    const prevTransform = area.style.transform;
+    area.style.transform = "none";
+
     try {
         const canvas = await html2canvas(area, {
             backgroundColor: "#ffffff",
             scale: 4,
             useCORS: true,
-            logging: false
+            logging: false,
+            windowWidth: DESKTOP_CAPTURE_WIDTH,
+            windowHeight: Math.max(area.scrollHeight, 1600)
         });
 
         const image = canvas.toDataURL("image/png");
@@ -609,6 +622,7 @@ saveBtn.addEventListener("click", async () => {
         alert("이미지 저장 중 문제가 발생했습니다.");
     } finally {
         area.classList.remove("capturing");
+        area.style.transform = prevTransform;
         buttonWrap.style.display = "flex";
         tabWrap.style.display = "flex";
         dateToggleWrap.style.display = "flex";
@@ -636,22 +650,31 @@ document.addEventListener("keydown", (e) => {
 
 function fitCaptureArea() {
     const area = currentTab === "rps" ? captureAreaRps : captureAreaLr;
-    const wrap = document.getElementById("scaleWrap");
+    const wrap = scaleWrap;
 
     if (!area || !wrap) return;
 
-    const ORIGINAL_WIDTH = 1400;
     const screenWidth = Math.min(
         window.innerWidth,
         document.documentElement.clientWidth
     );
 
-    const scale = Math.min(1, screenWidth / ORIGINAL_WIDTH);
+    if (screenWidth <= MOBILE_BREAKPOINT) {
+        /* 모바일: 축소 대신 CSS 반응형 레이아웃을 그대로 사용하고,
+           세로로 길어진 내용은 화면을 드래그해서 내려보는 방식으로 확인한다. */
+        area.style.transform = "none";
+        area.style.transformOrigin = "";
+        wrap.style.width = "";
+        wrap.style.height = "";
+        return;
+    }
+
+    const scale = Math.min(1, screenWidth / DESKTOP_CAPTURE_WIDTH);
 
     area.style.transformOrigin = "top left";
     area.style.transform = `scale(${scale})`;
 
-    wrap.style.width = `${ORIGINAL_WIDTH * scale}px`;
+    wrap.style.width = `${DESKTOP_CAPTURE_WIDTH * scale}px`;
     wrap.style.height = `${area.scrollHeight * scale}px`;
 }
 

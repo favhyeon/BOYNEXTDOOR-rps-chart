@@ -634,7 +634,102 @@ button:hover {
 
 @media (max-width: 768px) {
     .wrapper {
-        padding: 16px 0;
+        padding: 16px 12px 24px;
+    }
+
+    /* 모바일에서는 JS 축소(transform: scale) 대신
+       실제 레이아웃 폭을 화면에 맞춰 다시 짜기 때문에
+       scale-wrap / capture-area 모두 폭을 100%로 풀어준다. */
+    .scale-wrap {
+        width: 100% !important;
+        height: auto !important;
+        overflow: visible;
+    }
+
+    .capture-area {
+        width: 100%;
+        padding: 20px 14px 22px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, .08);
+    }
+
+    .logo {
+        width: 160px;
+        margin: 0 auto 2px;
+    }
+
+    h1 {
+        font-size: 19px;
+        margin: -6px 0 14px;
+    }
+
+    .chart-date {
+        font-size: 11px;
+        margin-left: 6px;
+    }
+
+    .guide-list {
+        margin-bottom: 12px;
+    }
+
+    .guide-list p {
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    /* 옆페스 취향표 - 6x6 표는 폭이 넓어 가로 스크롤로 확인 */
+    .table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        min-width: 620px;
+    }
+
+    th {
+        height: 46px;
+        font-size: 14px;
+    }
+
+    th:first-child {
+        width: 64px;
+    }
+
+    td {
+        height: 46px;
+        font-size: 14px;
+    }
+
+    .table-nav {
+        margin-bottom: 6px;
+    }
+
+    .nav-btn {
+        width: 26px;
+        height: 26px;
+        font-size: 11px;
+    }
+
+    .legend {
+        gap: 10px 14px;
+        margin-top: 16px;
+    }
+
+    .legend-item {
+        font-size: 11px;
+        gap: 5px;
+    }
+
+    .color {
+        width: 14px;
+        height: 14px;
+        border-width: 1.5px;
+    }
+
+    .capture-id-bottom {
+        font-size: 11px;
+        margin-top: 14px;
     }
 
     .tab-wrap {
@@ -658,16 +753,8 @@ button:hover {
         font-size: 14px;
     }
 
-    .guide-list p {
-        font-size: 13px;
-    }
-
     .date-toggle {
         font-size: 12px;
-    }
-
-    .chart-date {
-        font-size: 13px;
     }
 
     .save-box {
@@ -713,11 +800,41 @@ button:hover {
 
     .lr-grid {
         grid-template-columns: 1fr;
-        gap: 22px;
+        gap: 18px;
+    }
+
+    .lr-row {
+        gap: 12px;
     }
 
     .lr-avatar {
-        width: 60px;
-        height: 60px;
+        width: 52px;
+        height: 52px;
+        border-width: 2px;
+    }
+
+    .lr-bar-wrap {
+        gap: 6px;
+        margin-bottom: 6px;
+    }
+
+    .lr-label-l,
+    .lr-label-r {
+        font-size: 12px;
+    }
+
+    .lr-bar {
+        height: 20px;
+        border-radius: 6px;
+    }
+
+    .lr-text {
+        height: 62px;
+        font-size: 13px;
+        padding: 6px 10px 18px;
+    }
+
+    .lr-char-count {
+        font-size: 10px;
     }
 }
