@@ -46,12 +46,12 @@ const pairNames = [
 ];
 
 const options = [
-    { name: "OTP",      color: "#ff9ec8" },
-    { name: "좋아함",   color: "#ff4d4d" },
-    { name: "호감",     color: "#ffd54f" },
-    { name: "관심있음", color: "#8bd66d" },
+    { name: "OTP",      color: "#f7cde0" },
+    { name: "좋아함",   color: "#ff7373" },
+    { name: "호감",     color: "#fcee90" },
+    { name: "관심있음", color: "#c0fdbf },
     { name: "관심없음", color: "#ffffff" },
-    { name: "별로",     color: "#87d8ff" },
+    { name: "별로",     color: "#bfeefd" },
     { name: "지뢰",     color: "#999999" }
 ];
 
@@ -118,8 +118,8 @@ const GUIDE_TEXT = {
         "멤버 이름을 누르면 줄 전체선택이 가능해요."
     ],
     lr: [
-        "L-R 사이에서 원하는 칸을 여러 개 선택하고, 아래 칸에 취향을 적어보세요.",
-        "프로필을 선택하면 사진 변경이 가능해요."
+        "L-R 사이 원하는 부분의 칸을 선택하고, 아래 칸에 자유롭게 적어보세요.",
+        "각 멤버의 프로필을 누르면 사진 변경이 가능해요."
     ]
 };
 
