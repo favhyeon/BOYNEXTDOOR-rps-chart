@@ -558,6 +558,7 @@ button:hover {
 }
 
 .option-dot {
+    display: inline-block;
     width: 46px;
     height: 46px;
     border-radius: 50%;
@@ -578,6 +579,7 @@ button:hover {
 }
 
 .option-dot-wrap {
+    display: inline-block;
     position: relative;
     width: 46px;
     height: 46px;

@@ -47,10 +47,10 @@ const pairNames = [
 
 const options = [
     { name: "OTP",      color: "#f7cde0" },
-    { name: "좋아함",   color: "#f14d5e" },
+    { name: "좋아함",   color: "#ffafaf" },
     { name: "호감",     color: "#fcee90" },
-    { name: "관심있음", color: "#c0fdbf" },
-    { name: "관심없음", color: "#baebbb" },
+    { name: "관심있음", color: "#baebbb" },
+    { name: "관심없음", color: "#ffffff" },
     { name: "별로",     color: "#bfeefd" },
     { name: "지뢰",     color: "#999999" }
 ];
