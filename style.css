@@ -235,13 +235,11 @@ td.diagonal {
     border: 2px solid #d8d8d8;
 }
 
-.otp   { background: #ff9ec8; }
-.love  { background: #ff4d4d; }
-.like  { background: #ffd54f; }
-.okay  { background: #8bd66d; }
-.none  { background: #fff; }
-.bad   { background: #87d8ff; }
-.hate  { background: #999; }
+.color.dashed {
+    border-style: dashed;
+    border-color: #bbb;
+    background: #fff !important;
+}
 
 /* ===========================
    왼른 취향표
@@ -579,6 +577,63 @@ button:hover {
     text-align: center;
 }
 
+.option-dot-wrap {
+    position: relative;
+    width: 46px;
+    height: 46px;
+}
+
+.option-dot-wrap .option-dot {
+    width: 100%;
+    height: 100%;
+}
+
+.color-edit-btn {
+    position: absolute;
+    right: -6px;
+    bottom: -4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 1.5px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.color-edit-btn:hover {
+    background: #f4f4f4;
+}
+
+.color-edit-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+}
+
+.reset-colors-link {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #999;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.reset-colors-link:hover {
+    color: #00a3dc;
+}
+
 .clear-card .option-dot {
     display: flex;
     align-items: center;
@@ -799,6 +854,17 @@ button:hover {
     .option-dot {
         width: 38px;
         height: 38px;
+    }
+
+    .option-dot-wrap {
+        width: 38px;
+        height: 38px;
+    }
+
+    .color-edit-btn {
+        width: 17px;
+        height: 17px;
+        font-size: 9px;
     }
 
     .option-label {

@@ -47,13 +47,33 @@ const pairNames = [
 
 const options = [
     { name: "OTP",      color: "#f7cde0" },
-    { name: "좋아함",   color: "#ff7373" },
+    { name: "좋아함",   color: "#f14d5e" },
     { name: "호감",     color: "#fcee90" },
     { name: "관심있음", color: "#c0fdbf" },
-    { name: "관심없음", color: "#ffffff" },
+    { name: "관심없음", color: "#baebbb" },
     { name: "별로",     color: "#bfeefd" },
     { name: "지뢰",     color: "#999999" }
 ];
+
+/* 사용자가 직접 고른 커스텀 색상 (name -> hex).
+   여기에 값이 있으면 기본 color 대신 이 색을 쓴다.
+   options 배열의 기본값 자체는 절대 덮어쓰지 않는다. */
+const CUSTOM_COLOR_KEY = "boynextdoor-custom-colors";
+let customColors = JSON.parse(localStorage.getItem(CUSTOM_COLOR_KEY)) || {};
+
+function getOptionColor(option) {
+    return customColors[option.name] || option.color;
+}
+
+function setCustomColor(name, hex) {
+    customColors[name] = hex;
+    localStorage.setItem(CUSTOM_COLOR_KEY, JSON.stringify(customColors));
+}
+
+function resetCustomColors() {
+    customColors = {};
+    localStorage.removeItem(CUSTOM_COLOR_KEY);
+}
 
 const STORAGE_KEY = "boynextdoor-yeop-rps";
 const LR_STORAGE_KEY = "boynextdoor-lr-rps";
@@ -69,6 +89,7 @@ const saveBtn = document.getElementById("saveBtn");
 const resetBtn = document.getElementById("resetBtn");
 const guideListRps = document.getElementById("guideListRps");
 const guideListLr = document.getElementById("guideListLr");
+const legendRps = document.getElementById("legendRps");
 
 const dateToggleWrap = document.getElementById("dateToggleWrap");
 const dateToggle = document.getElementById("dateToggle");
@@ -133,6 +154,23 @@ function renderGuide(tab) {
     });
 }
 
+/* 범례를 options 배열(+커스텀 색상) 기준으로 매번 새로 그린다.
+   색이 바뀌어도 범례가 항상 실제 색과 일치하도록. */
+function renderLegend() {
+    if (!legendRps) return;
+    legendRps.innerHTML = "";
+    options.forEach(option => {
+        const color = getOptionColor(option);
+        const isNone = color.toLowerCase() === "#ffffff";
+        const item = document.createElement("div");
+        item.className = "legend-item";
+        item.innerHTML = `
+            <span class="color${isNone ? " dashed" : ""}" style="background:${color}"></span>${option.name}
+        `;
+        legendRps.appendChild(item);
+    });
+}
+
 /* ==========================================
    날짜 표시 (제목 옆 260810 ver. 형식)
 ========================================== */
@@ -157,6 +195,7 @@ createTable();
 createLrGrid();
 updateNavButtons();
 renderGuide(currentTab);
+renderLegend();
 updateDateDisplay();
 
 /* ==========================================
@@ -302,17 +341,39 @@ function openModal(titleText) {
     optionGrid.innerHTML = "";
 
     options.forEach(option => {
+        const color = getOptionColor(option);
         const item = document.createElement("div");
         item.className = "option-card";
 
-        const isNone = option.color.toLowerCase() === "#ffffff";
+        const isNone = color.toLowerCase() === "#ffffff";
 
         item.innerHTML = `
-            <span class="option-dot${isNone ? " dashed" : ""}" style="background:${option.color}"></span>
+            <span class="option-dot-wrap">
+                <span class="option-dot${isNone ? " dashed" : ""}" style="background:${color}"></span>
+                <label class="color-edit-btn" title="이 색상 직접 고르기">
+                    &#9998;
+                    <input type="color" class="color-edit-input" value="${color.length === 7 ? color : "#ffffff"}">
+                </label>
+            </span>
             <span class="option-label">${option.name}</span>
         `;
 
-        item.addEventListener("click", () => applySelection(option.color));
+        // 카드(동그라미) 클릭 -> 이 색을 셀에 적용
+        item.addEventListener("click", () => applySelection(getOptionColor(option)));
+
+        // 연필 아이콘 클릭은 셀 적용과 별개로, 색상 피커만 열기
+        const editBtn = item.querySelector(".color-edit-btn");
+        const editInput = item.querySelector(".color-edit-input");
+        editBtn.addEventListener("click", (e) => e.stopPropagation());
+        editInput.addEventListener("click", (e) => e.stopPropagation());
+        editInput.addEventListener("input", (e) => {
+            const hex = e.target.value;
+            item.querySelector(".option-dot").style.background = hex;
+        });
+        editInput.addEventListener("change", (e) => {
+            setCustomColor(option.name, e.target.value);
+            renderLegend();
+        });
 
         optionGrid.appendChild(item);
     });
@@ -327,6 +388,21 @@ function openModal(titleText) {
     optionGrid.appendChild(clearItem);
 
     modal.classList.remove("hidden");
+
+    // 색상 전체 초기화 링크
+    let resetLink = document.getElementById("resetColorsLink");
+    if (!resetLink) {
+        resetLink = document.createElement("div");
+        resetLink.id = "resetColorsLink";
+        resetLink.className = "reset-colors-link";
+        resetLink.textContent = "색상 기본값으로 되돌리기";
+        resetLink.addEventListener("click", () => {
+            resetCustomColors();
+            renderLegend();
+            openModal(titleText);
+        });
+        optionGrid.insertAdjacentElement("afterend", resetLink);
+    }
 }
 
 function setCellColor(td, color) {
